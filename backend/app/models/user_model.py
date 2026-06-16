@@ -6,6 +6,7 @@ class User_profile(BaseModel):
     """Container for a single user profile"""
 
     name: str = Field(...)
+    email: str = Field(...)
     education: str = Field(...)
     skills: List[str] 
     target_role: str
