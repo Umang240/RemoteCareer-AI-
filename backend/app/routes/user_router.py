@@ -28,6 +28,17 @@ def get_profiles():
     return profiles
 
 
+@router.get("/profiles/{id}")
+def get_profile(id: str):
+    """This API returns a single user profile by MongoDB ObjectId."""
+    profile = profiles_collection.find_one({"_id": ObjectId(id)})
+    if profile:
+        profile["_id"] = str(profile["_id"])
+        return profile
+
+    return {"message": "Profile not found"}
+
+
 @router.put("/update-profile/{id}")
 def update_profile(id: str, profile: User_profile):
 
