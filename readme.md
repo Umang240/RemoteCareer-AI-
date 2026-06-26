@@ -22,10 +22,18 @@ Students pursuing online and distance education often have limited access to car
   * Analyze user interests and skills
   * Recommend suitable career roles
 
+* Skill Gap Analysis
+
+  * Compare current skills with target roles
+  * Identify missing role-specific skills
+
+* Learning Roadmap Generator
+
+  * Generate personalized learning paths
+  * Recommend learning milestones for career goals
+
 ### Planned
 
-* Skill Gap Analysis
-* Learning Roadmap Generator
 * AI-Powered Career Advisor (Google Gemini)
 * Portfolio Project Recommendations
 * Interview Preparation Assistant
@@ -139,10 +147,10 @@ http://127.0.0.1:8000/docs
 * MongoDB Integration
 * User Profile CRUD
 * Career Assessment
+* Skill Gap Analysis
 
 ### Phase 2
 
-* Skill Gap Analysis
 * Learning Roadmap Generator
 
 ### Phase 3

@@ -185,6 +185,50 @@ POST /assessment
 
 ---
 
+## Skill Gap Analysis
+
+Compare current skills with target role requirements.
+
+### Endpoint
+
+```http
+POST /skill-gap
+```
+
+### Request Body
+
+```json
+{
+  "target_role": "AI Engineer",
+  "current_skills": [
+    "Python",
+    "SQL"
+  ]
+}
+```
+
+### Success Response
+
+```json
+{
+  "target_role": "AI Engineer",
+  "missing_skills": [
+    "Machine Learning",
+    "Deep Learning"
+  ]
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": "No skill data found for role: AI Engineer"
+}
+```
+
+---
+
 # Career Mapping
 
 The Career Assessment module currently uses a rule-based mapping system.
@@ -203,28 +247,44 @@ The Career Assessment module currently uses a rule-based mapping system.
 
 The following APIs are planned for future development.
 
-## Skill Gap Analysis
-
-```http
-POST /skill-gap
-```
-
-Purpose:
-
-* Compare current skills with target role requirements.
-* Identify missing skills.
-
----
-
 ## Learning Roadmap Generator
+
+### Endpoint
 
 ```http
 POST /roadmap
 ```
 
-Purpose:
+### Request Body
 
-* Generate a personalized learning roadmap.
+```json
+{
+  "target_role": "AI Engineer"
+}
+```
+
+### Success Response
+
+```json
+{
+  "target_role": "AI Engineer",
+  "roadmap": [
+    "Learn Python Fundamentals",
+    "Learn Machine Learning",
+    "Build AI Projects",
+    "Create Portfolio",
+    "Apply for Internships"
+  ]
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": "No roadmap found for role: AI Engineer"
+}
+```
 
 ---
 
@@ -246,12 +306,12 @@ Purpose:
 
 * User Profile CRUD APIs
 * Career Assessment API
+* Skill Gap Analysis API
+* Learning Roadmap Generator API
 * MongoDB Integration
 * FastAPI Backend Setup
 
 ### Planned
 
-* Skill Gap Analysis
-* Learning Roadmap Generator
 * Gemini Integration
 * Frontend Dashboard

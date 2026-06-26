@@ -117,11 +117,9 @@ Recommended Role:
 
 ---
 
-## Future Modules
-
 ### Skill Gap Analysis
 
-Compare user skills with industry requirements and identify missing skills.
+The Skill Gap Analysis module compares current skills against role requirements and identifies missing skills.
 
 Example:
 
@@ -172,6 +170,7 @@ Google Gemini will provide:
 * MongoDB Atlas Integration
 * User Profile CRUD APIs
 * Career Assessment API
+* Skill Gap Analysis API
 * Pydantic Data Validation
 
 ### In Progress
@@ -181,8 +180,6 @@ Google Gemini will provide:
 
 ### Planned
 
-* Skill Gap Analysis
-* Learning Roadmap Generator
 * Gemini Integration
 * React Frontend
 * Deployment
