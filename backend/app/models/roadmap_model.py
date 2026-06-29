@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class RoadmapRequest(BaseModel):
-    target_role: str
+    target_role: str = Field(..., min_length=1)

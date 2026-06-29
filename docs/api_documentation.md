@@ -290,13 +290,49 @@ POST /roadmap
 
 ## AI Career Advisor
 
+The career-advice module is now implemented and uses Google Gemini to return personalized guidance.
+
+### Endpoint
+
 ```http
-POST /career-advice
+POST /career-advice/
 ```
 
-Purpose:
+### Request Body
 
-* Generate personalized career guidance using Google Gemini.
+```json
+{
+  "education": "Online MCA",
+  "skills": ["Python", "FastAPI"],
+  "target_role": "AI Engineer"
+}
+```
+
+### Success Response
+
+```json
+{
+  "career_advice": "Focus on machine learning, APIs, and deployment experience.",
+  "next_skills": [
+    "Machine Learning",
+    "Docker",
+    "Cloud Deployment"
+  ],
+  "recommended_projects": [
+    "Build a FastAPI-based AI assistant",
+    "Deploy a portfolio project on cloud"
+  ],
+  "interview_tips": [
+    "Practice explaining your projects clearly",
+    "Be ready to discuss trade-offs in system design"
+  ]
+}
+```
+
+### Notes
+
+* The endpoint requires a valid Gemini API key configured in the backend environment as `GEMINI_API_KEY`.
+* The response is returned as JSON with structured guidance for career growth.
 
 ---
 

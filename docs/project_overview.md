@@ -153,12 +153,12 @@ Example:
 
 ### AI Career Advisor
 
-Google Gemini will provide:
+The AI Career Advisor module is now implemented with Google Gemini and provides:
 
 * Personalized career guidance
-* Learning recommendations
-* Career planning assistance
-* Project suggestions
+* Suggested next skills to learn
+* Recommended projects to build
+* Interview preparation tips
 
 ---
 
@@ -172,6 +172,7 @@ Google Gemini will provide:
 * Career Assessment API
 * Skill Gap Analysis API
 * Pydantic Data Validation
+* Gemini-Powered Career Advice API
 
 ### In Progress
 
@@ -180,7 +181,6 @@ Google Gemini will provide:
 
 ### Planned
 
-* Gemini Integration
 * React Frontend
 * Deployment
 

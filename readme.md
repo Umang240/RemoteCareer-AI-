@@ -32,9 +32,15 @@ Students pursuing online and distance education often have limited access to car
   * Generate personalized learning paths
   * Recommend learning milestones for career goals
 
+* AI-Powered Career Advisor
+
+  * Generate personalized career guidance with Gemini
+  * Suggest next skills to learn
+  * Recommend projects to build
+  * Provide interview preparation tips
+
 ### Planned
 
-* AI-Powered Career Advisor (Google Gemini)
 * Portfolio Project Recommendations
 * Interview Preparation Assistant
 * Frontend Dashboard
@@ -55,9 +61,9 @@ Students pursuing online and distance education often have limited access to car
 
 * Pydantic v2
 
-### AI Integration (Planned)
+### AI Integration
 
-* Google Gemini API
+* Google Gemini API for career advice generation
 
 ### Frontend (Planned)
 
@@ -123,6 +129,7 @@ Create a `.env` file:
 ```env
 MONGODB_URL=your_mongodb_connection_string
 DATABASE_NAME=remotecareer_ai
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ### Run Server
@@ -155,8 +162,8 @@ http://127.0.0.1:8000/docs
 
 ### Phase 3
 
-* Gemini Integration
-* Personalized Career Advice
+* Gemini-Based Career Advice
+* Personalized Career Guidance
 
 ### Phase 4
 

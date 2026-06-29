@@ -1,62 +1,94 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from app.models.user_model import User_profile
 from app.database.db import profiles_collection
-from bson import ObjectId
+from bson import ObjectId, errors
 
 router = APIRouter()
 
 
-@router.post("/create-profile")
+@router.post("/create-profile", status_code=status.HTTP_201_CREATED)
 def create_profile(profile: User_profile):
-    """This API create user profile."""
+    """Create a new user profile."""
     profile_data = profile.dict()
     profiles_collection.insert_one(profile_data)
-
     return {
         "message": "Profile created successfully"
     }
 
+
 @router.get("/profiles")
 def get_profiles():
-    """This API returns all user profiles stored in MongoDB."""
+    """Return all user profiles stored in MongoDB."""
     profiles = []
-
     for profile in profiles_collection.find():
         profile["_id"] = str(profile["_id"])
         profiles.append(profile)
-
     return profiles
 
 
 @router.get("/profiles/{id}")
 def get_profile(id: str):
-    """This API returns a single user profile by MongoDB ObjectId."""
-    profile = profiles_collection.find_one({"_id": ObjectId(id)})
-    if profile:
-        profile["_id"] = str(profile["_id"])
-        return profile
+    """Return a single user profile by MongoDB ObjectId."""
+    try:
+        object_id = ObjectId(id)
+    except errors.InvalidId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid profile id format"
+        )
 
-    return {"message": "Profile not found"}
+    profile = profiles_collection.find_one({"_id": object_id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+
+    profile["_id"] = str(profile["_id"])
+    return profile
 
 
 @router.put("/update-profile/{id}")
 def update_profile(id: str, profile: User_profile):
+    try:
+        object_id = ObjectId(id)
+    except errors.InvalidId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid profile id format"
+        )
 
-    profiles_collection.update_one(
-        {"_id": ObjectId(id)},
+    result = profiles_collection.update_one(
+        {"_id": object_id},
         {"$set": profile.dict()}
     )
+    if result.matched_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
 
     return {
         "message": "Profile updated successfully"
     }
 
+
 @router.delete("/delete-profile/{id}")
 def delete_profile(id: str):
+    try:
+        object_id = ObjectId(id)
+    except errors.InvalidId:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid profile id format"
+        )
 
-    profiles_collection.delete_one(
-        {"_id": ObjectId(id)}
-    )
+    result = profiles_collection.delete_one({"_id": object_id})
+    if result.deleted_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
 
     return {
         "message": "Profile deleted successfully"
