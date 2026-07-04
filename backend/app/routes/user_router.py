@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from app.models.user_model import User_profile
-from app.database.db import profiles_collection
+from app.database.db import users_collection
 from bson import ObjectId, errors
 
 router = APIRouter()
@@ -10,7 +10,7 @@ router = APIRouter()
 def create_profile(profile: User_profile):
     """Create a new user profile."""
     profile_data = profile.dict()
-    profiles_collection.insert_one(profile_data)
+    users_collection.insert_one(profile_data)
     return {
         "message": "Profile created successfully"
     }
@@ -20,7 +20,7 @@ def create_profile(profile: User_profile):
 def get_profiles():
     """Return all user profiles stored in MongoDB."""
     profiles = []
-    for profile in profiles_collection.find():
+    for profile in users_collection.find():
         profile["_id"] = str(profile["_id"])
         profiles.append(profile)
     return profiles
@@ -37,7 +37,7 @@ def get_profile(id: str):
             detail="Invalid profile id format"
         )
 
-    profile = profiles_collection.find_one({"_id": object_id})
+    profile = users_collection.find_one({"_id": object_id})
     if not profile:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -58,7 +58,7 @@ def update_profile(id: str, profile: User_profile):
             detail="Invalid profile id format"
         )
 
-    result = profiles_collection.update_one(
+    result = users_collection.update_one(
         {"_id": object_id},
         {"$set": profile.dict()}
     )
@@ -83,7 +83,7 @@ def delete_profile(id: str):
             detail="Invalid profile id format"
         )
 
-    result = profiles_collection.delete_one({"_id": object_id})
+    result = users_collection.delete_one({"_id": object_id})
     if result.deleted_count == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
