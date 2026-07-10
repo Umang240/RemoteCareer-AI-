@@ -6,6 +6,106 @@
 http://127.0.0.1:8000
 ```
 
+## Health Check
+
+### Endpoint
+
+```http
+GET /
+```
+
+### Success Response
+
+```json
+{
+  "message": "CareerGPT backend server is running"
+}
+```
+
+---
+
+# Authentication APIs
+
+## User Signup
+
+Register a new user account.
+
+### Endpoint
+
+```http
+POST /auth/signup
+```
+
+### Request Body
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Success Response
+
+```json
+{
+  "message": "User registered successfully"
+}
+```
+
+### Error Response
+
+```json
+{
+  "message": "Email already exists"
+}
+```
+
+### Notes
+
+* Password must be between 8-72 characters
+* Email must be a valid email format
+
+---
+
+## User Login
+
+Authenticate user with email and password.
+
+### Endpoint
+
+```http
+POST /auth/login
+```
+
+### Request Body
+
+```json
+{
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+```
+
+### Success Response
+
+```json
+{
+  "message": "Login successful",
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "bearer"
+}
+```
+
+### Error Response
+
+```json
+{
+  "message": "Invalid credentials"
+}
+```
+
 ---
 
 # User Profile APIs
@@ -118,6 +218,57 @@ PUT /update-profile/{id}
 
 ---
 
+## Get Single Profile
+
+Retrieve a specific user profile by ID.
+
+### Endpoint
+
+```http
+GET /profiles/{id}
+```
+
+### Path Parameters
+
+| Parameter | Type   | Description         |
+| --------- | ------ | ------------------- |
+| id        | string | MongoDB document ID |
+
+### Success Response
+
+```json
+{
+  "_id": "507f1f77bcf86cd799439011",
+  "name": "Umang Balodhi",
+  "email": "umang@example.com",
+  "education": "Online MCA",
+  "skills": [
+    "Python",
+    "FastAPI",
+    "MongoDB"
+  ],
+  "target_role": "AI Engineer"
+}
+```
+
+### Error Response
+
+```json
+{
+  "detail": "Invalid profile id format"
+}
+```
+
+or
+
+```json
+{
+  "detail": "Profile not found"
+}
+```
+
+---
+
 ## Delete Profile
 
 Delete a user profile.
@@ -142,18 +293,26 @@ DELETE /delete-profile/{id}
 }
 ```
 
+### Error Response
+
+```json
+{
+  "detail": "Profile not found"
+}
+```
+
 ---
 
 # Career Assessment APIs
 
 ## Assess Career
 
-Analyze user interests and skills to recommend career roles.
+Analyze user education, skills, and interests to recommend career roles.
 
 ### Endpoint
 
 ```http
-POST /assessment
+POST /assessment/
 ```
 
 ### Request Body
@@ -183,16 +342,22 @@ POST /assessment
 }
 ```
 
+### Notes
+
+* Education must be a non-empty string
+* Skills must be a non-empty list of strings
+* Interests must be a non-empty list of strings
+
 ---
 
 ## Skill Gap Analysis
 
-Compare current skills with target role requirements.
+Compare current skills with target role requirements and identify missing skills.
 
 ### Endpoint
 
 ```http
-POST /skill-gap
+POST /skill-gap/
 ```
 
 ### Request Body
@@ -214,7 +379,9 @@ POST /skill-gap
   "target_role": "AI Engineer",
   "missing_skills": [
     "Machine Learning",
-    "Deep Learning"
+    "Deep Learning",
+    "PyTorch",
+    "TensorFlow"
   ]
 }
 ```
@@ -226,6 +393,11 @@ POST /skill-gap
   "error": "No skill data found for role: AI Engineer"
 }
 ```
+
+### Notes
+
+* Target role must be a non-empty string
+* Current skills must be a non-empty list of strings
 
 ---
 
@@ -243,16 +415,16 @@ The Career Assessment module currently uses a rule-based mapping system.
 
 ---
 
-# Future APIs
 
-The following APIs are planned for future development.
 
 ## Learning Roadmap Generator
+
+Generate a structured learning roadmap for a target career role.
 
 ### Endpoint
 
 ```http
-POST /roadmap
+POST /roadmap/
 ```
 
 ### Request Body
@@ -269,11 +441,16 @@ POST /roadmap
 {
   "target_role": "AI Engineer",
   "roadmap": [
-    "Learn Python Fundamentals",
-    "Learn Machine Learning",
-    "Build AI Projects",
-    "Create Portfolio",
-    "Apply for Internships"
+    "Master Python fundamentals and data structures",
+    "Learn Linear Algebra and Statistics",
+    "Master Machine Learning algorithms (Supervised & Unsupervised)",
+    "Deep Learning with TensorFlow/PyTorch",
+    "Build portfolio projects (NLP, Computer Vision, RL)",
+    "Learn cloud deployment (AWS, GCP, Azure)",
+    "Practice system design and optimization",
+    "Participate in Kaggle competitions",
+    "Prepare for AI Engineer interviews",
+    "Apply for AI Engineer positions"
   ]
 }
 ```
@@ -286,11 +463,16 @@ POST /roadmap
 }
 ```
 
+### Notes
+
+* Target role must be a non-empty string
+* Roadmap data is retrieved from the predefined roadmaps database
+
 ---
 
-## AI Career Advisor
+# AI Career Advisor
 
-The career-advice module is now implemented and uses Google Gemini to return personalized guidance.
+Generate personalized career guidance using Google Gemini AI based on education, current skills, and target role.
 
 ### Endpoint
 
@@ -303,7 +485,7 @@ POST /career-advice/
 ```json
 {
   "education": "Online MCA",
-  "skills": ["Python", "FastAPI"],
+  "skills": ["Python", "FastAPI", "MongoDB"],
   "target_role": "AI Engineer"
 }
 ```
@@ -312,27 +494,47 @@ POST /career-advice/
 
 ```json
 {
-  "career_advice": "Focus on machine learning, APIs, and deployment experience.",
+  "career_advice": "With your FastAPI and MongoDB background, you have a strong foundation for building AI applications. Focus on machine learning fundamentals and cloud deployment to bridge the gap to AI Engineering roles.",
   "next_skills": [
     "Machine Learning",
-    "Docker",
-    "Cloud Deployment"
+    "Deep Learning with PyTorch",
+    "TensorFlow",
+    "Docker & Kubernetes",
+    "Cloud Deployment (AWS/GCP)"
   ],
   "recommended_projects": [
-    "Build a FastAPI-based AI assistant",
-    "Deploy a portfolio project on cloud"
+    "Build a FastAPI-based AI recommendation system",
+    "Deploy a machine learning model on cloud using Docker",
+    "Create an NLP chatbot application",
+    "Develop a computer vision project",
+    "Build end-to-end ML pipeline with monitoring"
   ],
   "interview_tips": [
-    "Practice explaining your projects clearly",
-    "Be ready to discuss trade-offs in system design"
+    "Be prepared to discuss your machine learning projects in detail",
+    "Understand the mathematical foundations of ML algorithms",
+    "Practice system design questions for scalable ML systems",
+    "Have examples of handling real-world datasets",
+    "Demonstrate knowledge of deployment and MLOps practices"
   ]
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": "Failed to generate career advice"
 }
 ```
 
 ### Notes
 
-* The endpoint requires a valid Gemini API key configured in the backend environment as `GEMINI_API_KEY`.
-* The response is returned as JSON with structured guidance for career growth.
+* Requires a valid Gemini API key configured in the environment as `GEMINI_API_KEY`
+* Uses Google's Gemini 2.5 Flash model for generating personalized guidance
+* Education must be a non-empty string
+* Skills must be a non-empty list of strings
+* Target role must be a non-empty string
+* Response includes structured career guidance with actionable recommendations
 
 ---
 
@@ -340,14 +542,21 @@ POST /career-advice/
 
 ### Completed
 
-* User Profile CRUD APIs
-* Career Assessment API
-* Skill Gap Analysis API
-* Learning Roadmap Generator API
-* MongoDB Integration
-* FastAPI Backend Setup
+* ✅ User Profile CRUD APIs (Create, Read, Get All, Update, Delete)
+* ✅ Authentication APIs (Signup, Login)
+* ✅ Career Assessment API
+* ✅ Skill Gap Analysis API
+* ✅ Learning Roadmap Generator API
+* ✅ AI Career Advisor API (Gemini Integration)
+* ✅ MongoDB Integration
+* ✅ FastAPI Backend Setup
+* ✅ JWT Token-based Authentication
+* ✅ Input Validation with Pydantic Models
 
 ### Planned
 
-* Gemini Integration
-* Frontend Dashboard
+* Frontend Dashboard with React
+* Advanced Role Matching Algorithm
+* Real-time Collaboration Features
+* Progress Tracking Dashboard
+* Recommendation Engine Enhancements

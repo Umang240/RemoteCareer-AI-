@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, status
+from app.middleware.auth_middleware import get_current_user
 from app.models.assessment_model import AssessmentRequest
 from app.services.assessment_service import get_career_recommendations
 
 router = APIRouter(
     prefix="/assessment",
-    tags=["Career Assessment"]
+    tags=["Career Assessment"],
+    dependencies=[Depends(get_current_user)]
 )
 
 @router.post("/", status_code=status.HTTP_200_OK)

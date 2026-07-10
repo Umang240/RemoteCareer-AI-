@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from app.models.user_model import User_profile
 from app.database.db import users_collection
+from app.middleware.auth_middleware import get_current_user
 from bson import ObjectId, errors
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @router.post("/create-profile", status_code=status.HTTP_201_CREATED)
