@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status
 from app.middleware.auth_middleware import get_current_user
 from app.models.assessment_model import AssessmentRequest
 from app.services.assessment_service import get_career_recommendations
+from app.utils.response_utils import success_response
 
 router = APIRouter(
     prefix="/assessment",
@@ -15,6 +16,7 @@ async def assess_career(data: AssessmentRequest):
         data.interests
     )
 
-    return {
-        "recommended_roles": recommendations
-    }
+    return success_response(
+        "Career recommendations generated successfully",
+        {"recommended_roles": recommendations},
+    )

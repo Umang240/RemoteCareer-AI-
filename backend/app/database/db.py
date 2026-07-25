@@ -15,3 +15,4 @@ if not MONGO_URI:
 client = MongoClient(MONGO_URI)
 db = client[DATABASE_NAME]
 users_collection = db["users"]
+profiles_collection = db["profiles"]

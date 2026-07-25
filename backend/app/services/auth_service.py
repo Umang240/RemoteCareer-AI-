@@ -1,3 +1,5 @@
+from fastapi import HTTPException, status
+
 from app.database.db import users_collection
 from app.utils.auth_utils import (
     hash_password,
@@ -13,9 +15,10 @@ def signup_user(user):
     )
 
     if existing_user:
-        return {
-            "message": "Email already exists"
-        }
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already exists"
+        )
 
     hashed_password = hash_password(
         user.password
@@ -42,17 +45,19 @@ def login_user(user):
     )
 
     if not db_user:
-        return {
-            "message": "Invalid credentials"
-        }
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
 
     if not verify_password(
         user.password,
         db_user["password"]
     ):
-        return {
-            "message": "Invalid credentials"
-        }
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
 
     token = create_access_token(
         {
@@ -61,6 +66,7 @@ def login_user(user):
     )
 
     return {
+        "message": "Login successful",
         "access_token": token,
         "token_type": "bearer"
     }
